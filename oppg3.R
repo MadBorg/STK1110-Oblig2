@@ -46,5 +46,20 @@ Y.CI.p = b0+b1*X + qt(alfa/2, Y.n-2) * Sy # same here
 # PI
   # b0 + b1*x +- t(alfa/2, n-2) * S * sqrt( 1 + 1/n + (X - X.mean)/sXX )
 x_star = c(210, 240, 270)
-Y.PI.x_star.p = ( b0 + b1*x_star ) + qt(alfa/2, Y.n-2) * S * sqrt( 1 + 1/Y.n + (X - X.mean)/Sxx )
-Y.PI.x_star.m = ( b0 + b1*x_star ) - qt(alfa/2, Y.n-2) * S * sqrt( 1 + 1/Y.n + (X - X.mean)/Sxx )
+y_hat = b0 + b1 * x_star
+PI <- function(b0, b1, x, x_mean, S, Sxx, n) {
+    p = b0 + b1*x + qt(alfa/2, n-2) * S * sqrt(1+1/n+(x-x_mean)^2/Sxx)
+    m = b0 + b1*x - qt(alfa/2, n-2) * S * sqrt(1+1/n+(x-x_mean)^2/Sxx)
+    res = data.frame(p, m)
+    colnames(res) <- c("p", "m")
+
+    return(res)
+}
+# Y.PI.x_star.p = ( b0 + b1*x_star ) + qt(alfa/2, Y.n-2) * S * sqrt( 1 + 1/Y.n + (X - X.mean)/Sxx )
+# Y.PI.x_star.m = ( b0 + b1*x_star ) - qt(alfa/2, Y.n-2) * S * sqrt( 1 + 1/Y.n + (X - X.mean)/Sxx )
+Y.PI.1 = PI(b0, b1, x_star[1], X.mean, S, Sxx, Y.n)
+Y.PI.2 = PI(b0, b1, x_star[2], X.mean, S, Sxx, Y.n)
+Y.PI.3 = PI(b0, b1, x_star[3], X.mean, S, Sxx, Y.n)
+
+
+
