@@ -61,5 +61,31 @@ Y.PI.1 = PI(b0, b1, x_star[1], X.mean, S, Sxx, Y.n)
 Y.PI.2 = PI(b0, b1, x_star[2], X.mean, S, Sxx, Y.n)
 Y.PI.3 = PI(b0, b1, x_star[3], X.mean, S, Sxx, Y.n)
 
+# d)
+X2 = plast$Pressure
+S2 = (sum(Y^2) - b0*sum(Y) - b1*sum(X2*Y)) / (X.n-1)
+S = sqrt(S2)
+sum((X2- X.mean)^2)
+Sy = S * sqrt( (1/Y.n) + (X - X.mean)^2/Sxx ) 
+reg_estimate <- function(Y, X) {
+    n = length(Y)
+    b1 = sum((X - mean(X)) * (Y - mean(Y))) / sum((X - mean(X))^2)
+    b0 = (sum(Y - b1) * sum(X)) / n
+    coeffs = data.frame(b0 = b0, b1 = b1)
+    return(coeffs)
+}
 
+CI <- function(b0, b1, x, n, alfa, Sy) {
+    Sy = S
+    p = b0+b1*x + qt(alfa/2, n-2) * Sy
+    m = b0+b1*x + qt(alfa/2, n-2) * Sy
+    return data.frame(
+        p = p,
+        m = m
+    )
+}
 
+estimate = reg_estimate(Y, X2)
+b0 = estimate$b0
+b1 = estimate$b1
+Y.CI = CI(b0, b1, X2, Y.n, alfa, Sy2)
