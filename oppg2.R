@@ -31,16 +31,16 @@ diff.se_mean = 1.58
 #Hypotesetest: H0: A - B = mu_D ==  0, mot Ha: A - B = mu_D = 0
 
 mu_D = A.mean - B.mean
-#df
+df = diff.N - 1
 #se.x = sd.x/sqrt(m)
 #se.y = sd.y/sqrt(n)
 
-df = ( (A.se_mean)^2 + (B.se_mean)^2 )^2 / ( (((A.se_mean)^4)/(A.n-1)) + ((B.se_mean)^4/(B.n-1)) ) # frihetsgrader
-t_obs = (A.mean - B.mean - 0) / sqrt( (A.sd/A.n) + (B.sd/B.n))
+# df = ( (A.se_mean)^2 + (B.se_mean)^2 )^2 / ( (((A.se_mean)^4)/(A.n-1)) + ((B.se_mean)^4/(B.n-1)) ) # frihetsgrader
+# t_obs = mu_D * (sqrt(diff.N)/diff.se_mean)
+t_obs = mu_D /(diff.se_mean /sqrt(diff.N))
 
-P.val = pt(t_obs, df) # hvis denne er regnet rett er det stor grunn til å forkaste H0
+P.val = 1-pt(t_obs, diff.N-1) 
 
-#c
 alfa = 0.05
 diff.Ci = diff.mean + c(1,-1) * qt(alfa/2, df) * sqrt( (A.sd/A.n) + (B.sd/A.n))
 # det at diff.Ci bare dekker negative verdier forteller at vi er mer en .95 sikker på at den sanne verdien er negative, siden vi er .95 sikker på at den sanne verdien ligger innenfor vaart CI.
